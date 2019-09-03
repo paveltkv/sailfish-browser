@@ -57,6 +57,10 @@ WebContainer {
         }
     }
 
+    property var searchEngine: SearchEngine {
+        available: false
+    }
+
     function stop() {
         if (contentItem) {
             contentItem.stop()
@@ -202,6 +206,8 @@ WebContainer {
                 if (!modelUrl || modelUrl != url) {
                     tabModel.updateThumbnailPath(tabId, "")
                 }
+
+                webView.searchEngine.available = false
             }
 
             onBgcolorChanged: {
@@ -272,6 +278,7 @@ WebContainer {
 
             onRecvAsyncMessage: {
                 if (pickerOpener.message(message, data) || popupOpener.message(message, data)) {
+
                     return
                 }
 
@@ -304,6 +311,14 @@ WebContainer {
                     if (!acceptedTouchIcon && acceptableTouchIcon || parsedFavicon) {
                         favicon = data.href
                         iconType = iconSize >= Theme.iconSizeMedium ? data.rel : ""
+                    }
+
+                    if (data.rel === "search") {
+                        console.log("***!!!*** link search get=" + data.get + " href=" + data.href + " title=" + data.title)
+                        webView.searchEngine.available = true
+                        webView.searchEngine.get = data.get
+                        webView.searchEngine.href = data.href
+                        webView.searchEngine.title = data.title
                     }
                     break
                 }

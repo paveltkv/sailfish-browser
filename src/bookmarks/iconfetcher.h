@@ -37,6 +37,7 @@ public:
     QString data() const;
     QString defaultIcon() const;
     bool hasAcceptedTouchIcon();
+    Q_INVOKABLE void saveSearchEngineXml();
 
 signals:
     void statusChanged();
@@ -57,6 +58,8 @@ private:
     QString m_data;
     qreal m_minimumIconSize;
     bool m_hasAcceptedTouchIcon;
+    QByteArray m_rawData;
+    QUrl *m_url;
 };
 
 
