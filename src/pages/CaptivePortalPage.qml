@@ -115,7 +115,7 @@ Page {
         fullscreenHeight: portrait ? Screen.height : Screen.width
         portrait: browserPage.isPortrait
         maxLiveTabCount: 3
-        toolbarHeight: overlay.toolBar.height
+        toolbarHeight: Math.min(overlay.toolBar.height, webView.fullscreenHeight - overlay.yPosition)
         rotationHandler: browserPage
         imOpened: virtualKeyboardObserver.opened
         canShowSelectionMarkers: false
@@ -182,6 +182,24 @@ Page {
         active: true
         webView: webView
         containerPage: browserPage
+
+        // Changing of the animator state changes toolbar position to final before animation starts.
+        // This prevents content flickering by skipping invalid y values.
+        property real yPosition: 0
+        property bool skipYChange: false
+
+        onYChanged: {
+            if (!overlay.skipYChange) {
+                overlay.yPosition = overlay.y
+            } else {
+                overlay.skipYChange = false
+            }
+        }
+
+        Connections {
+            target: overlay.animator
+            onStateChanged: overlay.skipYChange = true
+        }
 
         animator.onAtBottomChanged: {
             if (!animator.atBottom) {

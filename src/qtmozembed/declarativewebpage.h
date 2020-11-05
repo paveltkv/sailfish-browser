@@ -64,8 +64,6 @@ public:
     bool initialLoadHasHappened() const;
     void setInitialLoadHasHappened();
 
-    void timerEvent(QTimerEvent *);
-
     Q_INVOKABLE void loadTab(const QString &newUrl, bool force);
     Q_INVOKABLE void grabToFile(const QSize& size);
     Q_INVOKABLE void grabThumbnail(const QSize& size);
@@ -98,7 +96,6 @@ private slots:
     void grabWritten();
     void thumbnailReady();
     void updateViewMargins();
-    void resetViewMargins();
 
     // These are here to inform embedlite-components that keyboard is open or close
     // matching composition metrics.
@@ -131,7 +128,6 @@ private:
     qreal m_toolbarHeight;
     qreal m_virtualKeyboardMargin;
 
-    int m_marginChangeThrottleTimer;
     QMozSecurity m_security;
 };
 
